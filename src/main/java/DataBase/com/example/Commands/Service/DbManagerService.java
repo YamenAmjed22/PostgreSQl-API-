@@ -18,13 +18,15 @@ public class DbManagerService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+
     // methode to create DB
     public void createDatabase(String dbName) {
         String sql = "CREATE DATABASE " + dbName;
         jdbcTemplate.update(sql);
     }
 
-    // method to create tabel
+    // method to create table
     public void createTable(String dbName, String tableName, Map<String, String> fields) {
         // Ensure that the schema exists before creating the table
         createSchemaIfNotExists(dbName);
@@ -66,6 +68,28 @@ public class DbManagerService {
         }
     }
 
+    // delete data base
+    public void deleteDatabase(String dbName) {
+        // Query to terminate connections
+        String terminateQuery = "SELECT pg_terminate_backend(pid) " +
+                "FROM pg_stat_activity " +
+                "WHERE datname = ? " +  // Use placeholder for dynamic value
+                "AND pid <> pg_backend_pid()";
+
+        // Execute termination query using jdbcTemplate.query() to get results (if any)
+        jdbcTemplate.query(terminateQuery, new Object[]{dbName}, (rs) -> {
+            // You don't need to do anything with the results, just execute
+            return null;
+        });
+
+        // Query to drop the database
+        String dropQuery = "DROP DATABASE IF EXISTS " + dbName;  // Be cautious here: SQL injection risk if dbName is not sanitized.
+
+        // Execute drop query
+        jdbcTemplate.update(dropQuery);
+    }
+
+    // create Schema
     private void createSchemaIfNotExists(String dbName) {
         // Create a dynamic DataSource to connect to the database
         DataSource dataSource = createDataSource(dbName);
@@ -95,6 +119,10 @@ public class DbManagerService {
         dataSource.setPassword("admin");  // Set the appropriate password
         return dataSource;
     }
+
+
+
+
 
 
 }
