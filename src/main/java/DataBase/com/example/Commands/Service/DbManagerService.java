@@ -89,6 +89,51 @@ public class DbManagerService {
         jdbcTemplate.update(dropQuery);
     }
 
+    public void dropTable(String dbName, String tableName) {
+        // Ensure that the schema exists before dropping the table (optional)
+        // You could add a check here for schema existence if needed, though dropping tables is schema-specific.
+        // createSchemaIfNotExists(dbName);
+
+        // Create a dynamic DataSource to connect to the specified database
+        DataSource dataSource = createDataSource(dbName);
+        JdbcTemplate dynamicJdbcTemplate = new JdbcTemplate(dataSource);
+
+        // Build the SQL query to drop the table
+        String dropTableSql = "DROP TABLE IF EXISTS " + dbName + "." + tableName;
+
+        // Print the final SQL query for debugging purposes (optional)
+        System.out.println("Generated SQL Query: " + dropTableSql);
+
+        // Execute the SQL statement to drop the table
+        try {
+            dynamicJdbcTemplate.execute(dropTableSql);
+            System.out.println("Table " + tableName + " dropped successfully from " + dbName + " database.");
+        } catch (Exception e) {
+            System.err.println("Error executing SQL: " + e.getMessage());
+            throw new RuntimeException("Error executing table deletion: " + e.getMessage());
+        }
+    }
+    public void deleteTable(String dataBaseName, String tableName) {
+        DataSource dataSource = createDataSource(dataBaseName);
+        JdbcTemplate dynamicJdbcTemplate = new JdbcTemplate(dataSource);
+
+        // Build the SQL query to drop the table
+        String dropTableSql = "DROP TABLE IF EXISTS " + dataBaseName + "." + tableName;
+
+        // Print the final SQL query for debugging purposes (optional)
+        System.out.println("Generated SQL Query: " + dropTableSql);
+
+        // Execute the SQL statement to drop the table
+        try {
+            dynamicJdbcTemplate.execute(dropTableSql);
+            System.out.println("Table " + tableName + " dropped successfully from " + dataBaseName + " database.");
+        } catch (Exception e) {
+            System.err.println("Error executing SQL: " + e.getMessage());
+            throw new RuntimeException("Error executing table deletion: " + e.getMessage());
+        }
+    }
+
+
     // create Schema
     private void createSchemaIfNotExists(String dbName) {
         // Create a dynamic DataSource to connect to the database
@@ -119,9 +164,6 @@ public class DbManagerService {
         dataSource.setPassword("admin");  // Set the appropriate password
         return dataSource;
     }
-
-
-
 
 
 

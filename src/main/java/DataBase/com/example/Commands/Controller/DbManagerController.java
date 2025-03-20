@@ -50,7 +50,20 @@ public class DbManagerController {
                 return "Error deleting database: " + e.getMessage();
             }
         }
+    @DeleteMapping("/deleteTable/{dataBaseName}/{tableName}")
+    public String deleteTable(@PathVariable String dataBaseName, @PathVariable String tableName ) {
+            try {
+
+                dbManagerService.deleteTable(dataBaseName,tableName);
+                return "Table " + tableName + " deleted successfully";
+            } catch (Exception e) {
+                return "Error deleting table: " + e.getMessage();
+            }
+
+        }
 }
+
+
 
 
 //    @DeleteMapping("/delete")
