@@ -1,14 +1,14 @@
 package DataBase.com.example.Commands.Controller;
 
-import DataBase.com.example.Commands.Model.CreateDataBaseRequest;
-import DataBase.com.example.Commands.Model.CreateTableRequest;
-import DataBase.com.example.Commands.Model.DeleteDataBaseRequest;
 import DataBase.com.example.Commands.Service.DbManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/DB")
+import java.util.Map;
+
+@Controller
 public class DbManagerController {
 
     private final DbManagerService dbManagerService;
@@ -18,50 +18,79 @@ public class DbManagerController {
         this.dbManagerService = dbManagerService;
     }
 
-    // create DB
-    @PostMapping("/Create")
-    public String CreateDB(@RequestBody CreateDataBaseRequest createDataBaseRequest) {
+    @GetMapping("/createDatabase")
+    public String showCreateDatabasePage() {
+        return "createDatabase";
+    }
+
+    @PostMapping("/createDatabase")
+    public String createDatabase(@RequestParam String dbName, Model model) {
         try {
-            dbManagerService.createDatabase(createDataBaseRequest.getDbName());
-            return "Database " + createDataBaseRequest.getDbName() + " created successfully.";
+            dbManagerService.createDatabase(dbName);
+            model.addAttribute("message", "Database " + dbName + " created successfully.");
         } catch (Exception e) {
-            return "Error creating database: " + e.getMessage();
+            model.addAttribute("message", "Error creating database: " + e.getMessage());
         }
+        return "createDatabase";
+    }
+
+    @GetMapping("/createTable")
+    public String showCreateTablePage() {
+        return "createTable";
     }
 
     @PostMapping("/createTable")
-    public String createTable(@RequestBody CreateTableRequest createTableRequest) {
+    public String createTable(@RequestParam String dbName, @RequestParam String tableName,
+                              @RequestParam String fields, Model model) {
         try {
-            // Call the service to create the table in the specified database
-            dbManagerService.createTable(createTableRequest.getDbName(), createTableRequest.getTableName(), createTableRequest.getFields());
-            return "Table " + createTableRequest.getTableName() + " created successfully in " + createTableRequest.getDbName() + " database.";
+            Map<String, String> fieldMap = parseFields(fields);
+            dbManagerService.createTable(dbName, tableName, fieldMap);
+            model.addAttribute("message", "Table " + tableName + " created successfully.");
         } catch (Exception e) {
-            return "Error creating table: " + e.getMessage();
+            model.addAttribute("message", "Error creating table: " + e.getMessage());
         }
+        return "createTable";
     }
 
+    @GetMapping("/deleteDatabase")
+    public String showDeleteDatabasePage() {
+        return "deleteDatabase";
+    }
 
-    @DeleteMapping("/delete/{dbName}")
-        public String deleteDB(@PathVariable String dbName) {
-            try {
-                dbManagerService.deleteDatabase(dbName);  // Call the service method with the dbName from path
-                return "Database " + dbName + " deleted successfully.";
-            } catch (Exception e) {
-                return "Error deleting database: " + e.getMessage();
-            }
+    @PostMapping("/deleteDatabase")
+    public String deleteDatabase(@RequestParam String dbName, Model model) {
+        try {
+            dbManagerService.deleteDatabase(dbName);
+            model.addAttribute("message", "Database " + dbName + " deleted successfully.");
+        } catch (Exception e) {
+            model.addAttribute("message", "Error deleting database: " + e.getMessage());
         }
-    @DeleteMapping("/deleteTable/{dataBaseName}/{tableName}")
-    public String deleteTable(@PathVariable String dataBaseName, @PathVariable String tableName ) {
-            try {
+        return "deleteDatabase";
+    }
 
-                dbManagerService.deleteTable(dataBaseName,tableName);
-                return "Table " + tableName + " deleted successfully";
-            } catch (Exception e) {
-                return "Error deleting table: " + e.getMessage();
-            }
+    @GetMapping("/deleteTable")
+    public String showDeleteTablePage() {
+        return "deleteTable";
+    }
 
+    @PostMapping("/deleteTable")
+    public String deleteTable(@RequestParam String dbName, @RequestParam String tableName, Model model) {
+        try {
+            dbManagerService.deleteTable(dbName, tableName);
+            model.addAttribute("message", "Table " + tableName + " deleted successfully.");
+        } catch (Exception e) {
+            model.addAttribute("message", "Error deleting table: " + e.getMessage());
         }
+        return "deleteTable";
+    }
+
+    private Map<String, String> parseFields(String fields) {
+        // Method to parse the "fields" string into a map of column names and types.
+        // This is a basic example, and might need improvement based on the actual format.
+        return Map.of("id", "INT", "name", "VARCHAR(255)"); // Simplified
+    }
 }
+
 
 
 

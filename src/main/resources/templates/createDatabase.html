@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Database</title>
+</head>
+<body>
+<h1>Create a New Database</h1>
+
+<form action="#" th:action="@{/createDatabase}" method="post">
+    <label for="dbName">Database Name:</label>
+    <input type="text" id="dbName" name="dbName" required>
+    <button type="submit">Create Database</button>
+</form>
+
+<div th:if="${message}">
+    <p th:text="${message}"></p>
+</div>
+</body>
+</html>

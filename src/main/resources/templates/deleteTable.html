@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delete Table</title>
+</head>
+<body>
+<h1>Delete a Table</h1>
+
+<form action="#" th:action="@{/deleteTable}" method="post">
+    <label for="dbName">Database Name:</label>
+    <input type="text" id="dbName" name="dbName" required>
+
+    <label for="tableName">Table Name:</label>
+    <input type="text" id="tableName" name="tableName" required>
+
+    <button type="submit">Delete Table</button>
+</form>
+
+<div th:if="${message}">
+    <p th:text="${message}"></p>
+</div>
+</body>
+</html>
