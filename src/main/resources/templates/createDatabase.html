@@ -2,18 +2,94 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Create Database</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        nav {
+            background-color: #444;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        nav a:hover {
+            background-color: #ddd;
+            color: black;
+            padding: 5px;
+        }
+        .content {
+            width: 60%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"], textarea {
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<h1>Create a New Database</h1>
 
-<form action="#" th:action="@{/createDatabase}" method="post">
-    <label for="dbName">Database Name:</label>
-    <input type="text" id="dbName" name="dbName" required>
-    <button type="submit">Create Database</button>
-</form>
+<header>
+    <h1>Create a New Database</h1>
+</header>
 
-<div th:if="${message}">
-    <p th:text="${message}"></p>
+<nav>
+    <a href="/createDatabase">Create Database</a>
+    <a href="/createTable">Create Table</a>
+    <a href="/deleteDatabase">Delete Database</a>
+    <a href="/deleteTable">Delete Table</a>
+</nav>
+
+<div class="content">
+    <form action="#" th:action="@{/createDatabase}" method="post">
+        <label for="dbName">Database Name:</label>
+        <input type="text" id="dbName" name="dbName" required>
+        <button type="submit">Create Database</button>
+    </form>
+
+    <div th:if="${message}" class="message">
+        <p th:text="${message}"></p>
+    </div>
 </div>
+
 </body>
 </html>

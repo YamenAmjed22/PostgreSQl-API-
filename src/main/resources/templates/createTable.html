@@ -2,25 +2,101 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Create Table</title>
+    <style>
+        body {
+           font-family: Arial, sans-serif;
+           background-color: #f4f4f9;
+           margin: 0;
+           padding: 0;
+       }
+       header {
+           background-color: #333;
+           color: white;
+           padding: 10px;
+           text-align: center;
+       }
+       nav {
+           background-color: #444;
+           padding: 10px;
+           text-align: center;
+       }
+       nav a {
+           color: white;
+           margin: 0 15px;
+           text-decoration: none;
+           font-size: 18px;
+       }
+       nav a:hover {
+           background-color: #ddd;
+           color: black;
+           padding: 5px;
+       }
+       .content {
+           width: 60%;
+           margin: 30px auto;
+           padding: 20px;
+           background-color: white;
+           border-radius: 8px;
+           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+       }
+       form {
+           display: flex;
+           flex-direction: column;
+       }
+       input[type="text"], textarea {
+           padding: 8px;
+           margin-bottom: 15px;
+           border: 1px solid #ccc;
+           border-radius: 5px;
+       }
+       button {
+           background-color: #4CAF50;
+           color: white;
+           border: none;
+           padding: 10px;
+           border-radius: 5px;
+           cursor: pointer;
+       }
+       button:hover {
+           background-color: #45a049;
+       }
+       .message {
+           margin-top: 20px;
+           text-align: center;
+       }
+    </style>
 </head>
 <body>
-<h1>Create a Table in a Database</h1>
 
-<form action="#" th:action="@{/createTable}" method="post">
-    <label for="dbName">Database Name:</label>
-    <input type="text" id="dbName" name="dbName" required>
+<header>
+    <h1>Create a Table in a Database</h1>
+</header>
 
-    <label for="tableName">Table Name:</label>
-    <input type="text" id="tableName" name="tableName" required>
+<nav>
+    <a href="/createDatabase">Create Database</a>
+    <a href="/createTable">Create Table</a>
+    <a href="/deleteDatabase">Delete Database</a>
+    <a href="/deleteTable">Delete Table</a>
+</nav>
 
-    <label for="fields">Fields (column name and type):</label>
-    <textarea id="fields" name="fields" placeholder="e.g., id INT, name VARCHAR(255)" required></textarea>
+<div class="content">
+    <form action="#" th:action="@{/createTable}" method="post">
+        <label for="dbName">Database Name:</label>
+        <input type="text" id="dbName" name="dbName" required>
 
-    <button type="submit">Create Table</button>
-</form>
+        <label for="tableName">Table Name:</label>
+        <input type="text" id="tableName" name="tableName" required>
 
-<div th:if="${message}">
-    <p th:text="${message}"></p>
+        <label for="fields">Fields (column name and type):</label>
+        <textarea id="fields" name="fields" placeholder="e.g., id INT, name VARCHAR(255)" required></textarea>
+
+        <button type="submit">Create Table</button>
+    </form>
+
+    <div th:if="${message}" class="message">
+        <p th:text="${message}"></p>
+    </div>
 </div>
+
 </body>
 </html>
